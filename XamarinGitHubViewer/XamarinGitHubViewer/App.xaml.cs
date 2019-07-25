@@ -8,12 +8,13 @@ namespace XamarinGitHubViewer
 {
     public partial class App : Application
     {
+        public static readonly string GitHubGraphQLUrl = "https://api.github.com/graphql";
 
         public App()
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<GitHubClient>();
             MainPage = new AppShell();
         }
 
