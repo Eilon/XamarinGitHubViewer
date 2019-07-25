@@ -1,15 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
 using XamarinGitHubViewer.Models;
-using XamarinGitHubViewer.Views;
 using XamarinGitHubViewer.ViewModels;
+using Xamarin.Essentials;
+using XamarinGitHubViewer.Services;
 
 namespace XamarinGitHubViewer.Views
 {
@@ -36,7 +31,7 @@ namespace XamarinGitHubViewer.Views
             //await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
 
             // Manually deselect item.
-            ItemsListView.SelectedItem = null;
+            ReposListView.SelectedItem = null;
         }
 
         //async void AddItem_Clicked(object sender, EventArgs e)
@@ -49,12 +44,25 @@ namespace XamarinGitHubViewer.Views
             base.OnAppearing();
 
             if (viewModel.Repos.Count == 0)
+            {
                 viewModel.LoadReposCommand.Execute(null);
+            }
         }
 
         private async void Settings_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new GitHubSettingsPage()));
+        }
+
+        private void ReposListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        {
+            if (e.ItemIndex == viewModel.Repos.Count - 1)
+            {
+                // if the last item is appearing, get more data
+                var appearingItem = (RepositoryEdge)e.Item;
+
+                viewModel.GetMoreReposCommand.Execute(appearingItem.Cursor);
+            }
         }
     }
 }

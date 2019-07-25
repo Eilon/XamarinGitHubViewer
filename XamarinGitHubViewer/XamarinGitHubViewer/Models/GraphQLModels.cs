@@ -8,6 +8,12 @@ namespace XamarinGitHubViewer.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
+        public StargazersNode Stargazers { get; set; }
+    }
+
+    public class StargazersNode
+    {
+        public int TotalCount { get; set; }
     }
 
     public class RepositoriesConnection

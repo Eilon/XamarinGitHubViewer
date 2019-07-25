@@ -13,7 +13,7 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        <ListView x:Name="ItemsListView"
+        <ListView x:Name="ReposListView"
                 ItemsSource="{Binding Repos}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
@@ -21,7 +21,8 @@
                 IsPullToRefreshEnabled="true"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 CachingStrategy="RecycleElement"
-                ItemSelected="OnItemSelected">
+                ItemSelected="OnItemSelected"
+                ItemAppearing="ReposListView_ItemAppearing">
             <d:ListView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>First Item</x:String>
@@ -35,18 +36,29 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding Name}" 
-                                d:Text="{Binding .}"
-                                LineBreakMode="NoWrap" 
-                                Style="{DynamicResource ListItemTextStyle}" 
-                                FontSize="16" />
-                            <Label Text="{Binding Description}" 
+                        <StackLayout Padding="10" Orientation="Vertical">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Node.Name}" 
+                                    d:Text="{Binding .}"
+                                    LineBreakMode="NoWrap" 
+                                    Style="{DynamicResource ListItemTextStyle}" 
+                                    FontSize="16" />
+                                <Label Text="*" 
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13" />
+                                <Label Text="{Binding Node.Stargazers.TotalCount}" 
+                                    d:Text="5"
+                                    LineBreakMode="NoWrap"
+                                    Style="{DynamicResource ListItemDetailTextStyle}"
+                                    FontSize="13" />
+                            </StackLayout>
+                            <Label Text="{Binding Node.Description}" 
                                 d:Text="Item description"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
-                            <Label Text="{Binding Url}" 
+                            <Label Text="{Binding Node.Url}" 
                                 d:Text="http://repo_url"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"

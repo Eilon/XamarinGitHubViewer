@@ -22,7 +22,7 @@ namespace XamarinGitHubViewer.Services
 
         bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 
-        public async Task<IEnumerable<RepositoryEdge>> GetRepositories(string orgName)
+        public async Task<IEnumerable<RepositoryEdge>> GetRepositories(string orgName, string afterCursor = null)
         {
             if (IsConnected)
             {
@@ -38,6 +38,7 @@ query($login:String!, $after:String)
         node {
           name
           url
+          description
           stargazers {
             totalCount
           }
@@ -53,7 +54,7 @@ query($login:String!, $after:String)
                     new
                     {
                         Login = orgName,
-                        //After = "",
+                        After = afterCursor,
                     };
 
                 // TODO: This type is probably thread safe, so consider having only 1 instance
