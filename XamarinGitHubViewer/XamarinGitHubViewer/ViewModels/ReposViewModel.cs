@@ -46,10 +46,10 @@ namespace XamarinGitHubViewer.ViewModels
                 // TODO: Check here if the data is not available
                 var token = await SecureStorage.GetAsync("Token");
 
-                var items = await new GitHubClient(token).GetRepositoryNames("xamarin");
+                var items = await new GitHubClient(token).GetRepositories("xamarin");
                 foreach (var item in items)
                 {
-                    Repos.Add(item);
+                    Repos.Add(item.Node);
                 }
             }
             catch (Exception ex)

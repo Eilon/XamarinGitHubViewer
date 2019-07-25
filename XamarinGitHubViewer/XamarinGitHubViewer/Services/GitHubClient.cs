@@ -22,37 +22,51 @@ namespace XamarinGitHubViewer.Services
 
         bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 
-        public async Task<IEnumerable<RepositoryNode>> GetRepositoryNames(string orgName)
+        public async Task<IEnumerable<RepositoryEdge>> GetRepositories(string orgName)
         {
             if (IsConnected)
             {
                 var recipeGraphQLRequest = new GraphQLRequest
                 {
                     Query = @"
-query($login:String!)
+query($login:String!, $after:String)
 {
   organization(login: $login) {
-    repositories(first: 5, orderBy: {field: NAME, direction: ASC}) {
-      totalCount
-      nodes {
-        name
-        description
+    repositories(first: 10, after:$after, orderBy: {field: NAME, direction: ASC}) {
+      edges {
+        cursor
+        node {
+          name
+          url
+          stargazers {
+            totalCount
+          }
+        }
       }
+      totalCount
     }
   }
 }
 ",
                 };
-                recipeGraphQLRequest.Variables = new { Login = orgName };
+                recipeGraphQLRequest.Variables =
+                    new
+                    {
+                        Login = orgName,
+                        //After = "",
+                    };
 
-                var graphQLClient = new GraphQLClient(App.GitHubGraphQLUrl);
-                graphQLClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Token);
-                graphQLClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("hubbup.io", VersionTracking.CurrentVersion));
+                // TODO: This type is probably thread safe, so consider having only 1 instance
+                using (var graphQLClient = new GraphQLClient(App.GitHubGraphQLUrl))
+                {
+                    graphQLClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", Token);
+                    graphQLClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("XamarinGitHubViewer", VersionTracking.CurrentVersion));
 
-                var graphQLResponse = await graphQLClient.PostAsync(recipeGraphQLRequest);
-                var orgRepos = graphQLResponse.GetDataFieldAs<RepositoriesItem>("organization");
+                    var graphQLResponse = await graphQLClient.PostAsync(recipeGraphQLRequest);
+                    var orgRepos = graphQLResponse.GetDataFieldAs<RepositoriesItem>("organization");
 
-                return orgRepos.Repositories.Nodes;
+                    return orgRepos.Repositories.Edges;
+                }
             }
 
             return null;

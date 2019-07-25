@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGitHubViewer.Android
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGitHubViewer.iOS", "XamarinGitHubViewer\XamarinGitHubViewer.iOS\XamarinGitHubViewer.iOS.csproj", "{9DA98408-907C-48C7-98C6-0C6F020372C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGitHubViewer", "XamarinGitHubViewer\XamarinGitHubViewer\XamarinGitHubViewer.csproj", "{1F13999F-77D6-4DB6-A2F6-A0319ADF7A56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XamarinGitHubViewer", "XamarinGitHubViewer\XamarinGitHubViewer\XamarinGitHubViewer.csproj", "{1F13999F-77D6-4DB6-A2F6-A0319ADF7A56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FA055656-3FCC-48E3-B041-263AA7CF26C9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

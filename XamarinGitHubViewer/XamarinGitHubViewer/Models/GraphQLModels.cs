@@ -12,17 +12,18 @@ namespace XamarinGitHubViewer.Models
 
     public class RepositoriesConnection
     {
+        public IList<RepositoryEdge> Edges { get; set; }
         public int TotalCount { get; set; }
-        public IList<RepositoryNode> Nodes { get; set; }
+    }
+
+    public class RepositoryEdge
+    {
+        public string Cursor { get; set; }
+        public RepositoryNode Node { get; set; }
     }
 
     public class RepositoriesItem
     {
         public RepositoriesConnection Repositories { get; set; }
-    }
-
-    public class OrganizationsQueryResult
-    {
-        public RepositoriesItem Organization { get; set; }
     }
 }
