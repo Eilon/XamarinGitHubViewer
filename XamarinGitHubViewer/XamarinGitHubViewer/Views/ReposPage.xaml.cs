@@ -31,7 +31,7 @@ namespace XamarinGitHubViewer.Views
             //await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
 
             // Manually deselect item.
-            ReposListView.SelectedItem = null;
+            //ReposListView.SelectedItem = null;
         }
 
         //async void AddItem_Clicked(object sender, EventArgs e)

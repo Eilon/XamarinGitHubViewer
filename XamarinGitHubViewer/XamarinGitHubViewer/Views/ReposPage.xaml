@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:ctl="clr-namespace:XamarinGitHubViewer.Controls"
              mc:Ignorable="d"
              x:Class="XamarinGitHubViewer.Views.ReposPage"
              Title="{Binding Title}"
@@ -13,18 +12,14 @@
         <ToolbarItem Text="Settings" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <ctl:InfiniteListView x:Name="ReposListView"
-                ItemsSource="{Binding Repos}"
-                VerticalOptions="FillAndExpand"
-                HasUnevenRows="true"
-                RefreshCommand="{Binding LoadReposCommand}"
-                GetMoreDataCommand="{Binding GetMoreReposCommand}"
-                IsPullToRefreshEnabled="true"
-                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                CachingStrategy="RecycleElement"
-                ItemSelected="OnItemSelected"
+        <CollectionView
+            x:Name="ReposCollectionView"
+            ItemsSource="{Binding Repos}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedRepo}"
+            SelectionChangedCommand="{Binding SelectionChangedCommand}"
         >
-            <d:ListView.ItemsSource>
+            <d:CollectionView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>First Item</x:String>
                     <x:String>Second Item</x:String>
@@ -33,42 +28,40 @@
                     <x:String>Fifth Item</x:String>
                     <x:String>Sixth Item</x:String>
                 </x:Array>
-            </d:ListView.ItemsSource>
-            <ListView.ItemTemplate>
+            </d:CollectionView.ItemsSource>
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="10" Orientation="Vertical">
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Node.Name}" 
+                    <StackLayout Padding="10" Orientation="Vertical">
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Node.Name}" 
                                     d:Text="{Binding .}"
                                     LineBreakMode="NoWrap" 
                                     Style="{DynamicResource ListItemTextStyle}" 
                                     FontSize="16" />
-                                <Label Text="*" 
+                            <Label Text="*" 
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"
                                     FontSize="13" />
-                                <Label Text="{Binding Node.Stargazers.TotalCount}" 
+                            <Label Text="{Binding Node.Stargazers.TotalCount}" 
                                     d:Text="5"
                                     LineBreakMode="NoWrap"
                                     Style="{DynamicResource ListItemDetailTextStyle}"
                                     FontSize="13" />
-                            </StackLayout>
-                            <Label Text="{Binding Node.Description}" 
+                        </StackLayout>
+                        <Label Text="{Binding Node.Description}" 
                                 d:Text="Item description"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
-                            <Label Text="{Binding Node.Url}" 
+                        <Label Text="{Binding Node.Url}" 
                                 d:Text="http://repo_url"
                                 LineBreakMode="NoWrap"
                                 Style="{DynamicResource ListItemDetailTextStyle}"
                                 FontSize="13" />
-                        </StackLayout>
-                    </ViewCell>
+                    </StackLayout>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ctl:InfiniteListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 
 </ContentPage>

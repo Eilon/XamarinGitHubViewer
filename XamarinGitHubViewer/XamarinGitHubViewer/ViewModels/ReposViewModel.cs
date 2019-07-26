@@ -32,6 +32,16 @@ namespace XamarinGitHubViewer.ViewModels
             //});
         }
 
+        public Command SelectionChangedCommand => new Command(ItemSelectionChanged);
+
+
+        public RepositoryEdge SelectedRepo { get; set; }
+
+        void ItemSelectionChanged()
+        {
+            Debug.WriteLine($"Selected item: " + SelectedRepo?.Node.Name ?? "<null>");
+        }
+
         async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
         {
             if (IsBusy)
