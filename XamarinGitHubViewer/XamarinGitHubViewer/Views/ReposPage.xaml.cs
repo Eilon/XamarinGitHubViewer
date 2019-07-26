@@ -53,16 +53,5 @@ namespace XamarinGitHubViewer.Views
         {
             await Navigation.PushModalAsync(new NavigationPage(new GitHubSettingsPage()));
         }
-
-        private void ReposListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
-        {
-            if (e.ItemIndex == viewModel.Repos.Count - 1)
-            {
-                // if the last item is appearing, get more data
-                var appearingItem = (RepositoryEdge)e.Item;
-
-                viewModel.GetMoreReposCommand.Execute(appearingItem.Cursor);
-            }
-        }
     }
 }

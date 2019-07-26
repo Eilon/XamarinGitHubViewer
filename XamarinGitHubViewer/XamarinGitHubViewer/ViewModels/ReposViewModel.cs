@@ -22,7 +22,7 @@ namespace XamarinGitHubViewer.ViewModels
             Title = "Browse";
             Repos = new ObservableCollection<RepositoryEdge>();
             LoadReposCommand = new Command(async () => await ExecuteLoadReposCommand());
-            GetMoreReposCommand = new Command(async (context) => await ExecuteGetMoreReposCommand(afterCursor: (string)context));
+            GetMoreReposCommand = new Command(async (context) => await ExecuteGetMoreReposCommand((RepositoryEdge)context));
 
             //MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
             //{
@@ -32,7 +32,7 @@ namespace XamarinGitHubViewer.ViewModels
             //});
         }
 
-        async Task ExecuteGetMoreReposCommand(string afterCursor)
+        async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
         {
             if (IsBusy)
             {
@@ -46,7 +46,9 @@ namespace XamarinGitHubViewer.ViewModels
                 // TODO: Check here if the data is not available in settings
                 var token = await SecureStorage.GetAsync("Token");
 
-                var items = await new GitHubClient(token).GetRepositories("xamarin", afterCursor);
+                var cursorOfOldLastItem = repo.Cursor;
+
+                var items = await new GitHubClient(token).GetRepositories("xamarin", cursorOfOldLastItem);
                 foreach (var item in items)
                 {
                     Repos.Add(item);

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctl="clr-namespace:XamarinGitHubViewer.Controls"
              mc:Ignorable="d"
              x:Class="XamarinGitHubViewer.Views.ReposPage"
              Title="{Binding Title}"
@@ -11,18 +12,18 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Settings" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
-
     <StackLayout>
-        <ListView x:Name="ReposListView"
+        <ctl:InfiniteListView x:Name="ReposListView"
                 ItemsSource="{Binding Repos}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
                 RefreshCommand="{Binding LoadReposCommand}"
+                GetMoreDataCommand="{Binding GetMoreReposCommand}"
                 IsPullToRefreshEnabled="true"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 CachingStrategy="RecycleElement"
                 ItemSelected="OnItemSelected"
-                ItemAppearing="ReposListView_ItemAppearing">
+        >
             <d:ListView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>First Item</x:String>
@@ -67,7 +68,8 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ctl:InfiniteListView>
     </StackLayout>
 
 </ContentPage>
+    
