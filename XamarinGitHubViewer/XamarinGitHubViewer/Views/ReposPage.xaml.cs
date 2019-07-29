@@ -43,7 +43,7 @@ namespace XamarinGitHubViewer.Views
         {
             base.OnAppearing();
 
-            if (viewModel.Repos.Count == 0)
+            if (!viewModel.ReposLoaded)
             {
                 viewModel.LoadReposCommand.Execute(null);
             }

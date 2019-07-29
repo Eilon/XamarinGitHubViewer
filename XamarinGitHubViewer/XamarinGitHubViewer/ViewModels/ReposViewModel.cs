@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -13,14 +13,18 @@ namespace XamarinGitHubViewer.ViewModels
 {
     public class ReposViewModel : BaseViewModel
     {
-        public ObservableCollection<RepositoryEdge> Repos { get; set; }
+        private RepositoryEdge _selectedRepo;
+
+        public bool ReposLoaded { get; private set; }
+        public VirtualReadOnlyList<RepositoryEdge> Repos { get; }
         public Command LoadReposCommand { get; set; }
         public Command GetMoreReposCommand { get; set; }
 
         public ReposViewModel()
         {
             Title = "Browse";
-            Repos = new ObservableCollection<RepositoryEdge>();
+            Repos = new VirtualReadOnlyList<RepositoryEdge>();
+            Repos.NeedMoreItems += Repos_NeedMoreItems;
             LoadReposCommand = new Command(async () => await ExecuteLoadReposCommand());
             GetMoreReposCommand = new Command(async (context) => await ExecuteGetMoreReposCommand((RepositoryEdge)context));
 
@@ -32,14 +36,32 @@ namespace XamarinGitHubViewer.ViewModels
             //});
         }
 
+        private async void Repos_NeedMoreItems(object sender, NeedMoreItemsEventArgs<RepositoryEdge> e)
+        {
+            await ExecuteGetMoreReposCommand(e.LastItem);
+        }
+
         public Command SelectionChangedCommand => new Command(ItemSelectionChanged);
 
-
-        public RepositoryEdge SelectedRepo { get; set; }
+        public RepositoryEdge SelectedRepo
+        {
+            get => _selectedRepo;
+            set
+            {
+                if (_selectedRepo != value)
+                {
+                    _selectedRepo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         void ItemSelectionChanged()
         {
-            Debug.WriteLine($"Selected item: " + SelectedRepo?.Node.Name ?? "<null>");
+            Debug.WriteLine($"Selected item: " + (SelectedRepo?.Node.Name ?? "<null>"));
+
+            // De-select the item
+            SelectedRepo = null;
         }
 
         async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
@@ -95,6 +117,7 @@ namespace XamarinGitHubViewer.ViewModels
                 {
                     Repos.Add(item);
                 }
+                ReposLoaded = true;
             }
             catch (Exception ex)
             {
