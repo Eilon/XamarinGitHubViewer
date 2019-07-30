@@ -74,10 +74,10 @@ namespace XamarinGitHubViewer.ViewModels
 
         async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
         {
-            await LoadSomeRepos(ensureCleared: false);
+            await LoadSomeRepos(ensureCleared: false, afterCursor: repo.Cursor);
         }
 
-        async Task LoadSomeRepos(bool ensureCleared)
+        async Task LoadSomeRepos(bool ensureCleared, string afterCursor = null)
         {
             if (IsBusy)
             {
@@ -96,7 +96,7 @@ namespace XamarinGitHubViewer.ViewModels
                 // TODO: Check here if the data is not available in settings
                 var token = await SecureStorage.GetAsync("Token");
 
-                var repoResult = await new GitHubClient(token).GetRepositories("xamarin");
+                var repoResult = await new GitHubClient(token).GetRepositories("xamarin", afterCursor: afterCursor);
                 foreach (var item in repoResult.Repos)
                 {
                     Repos.Add(item);
