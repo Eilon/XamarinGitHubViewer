@@ -12,14 +12,25 @@
         <ToolbarItem Text="Settings" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Items in source: "></Label>
-            <Label Text="{Binding ItemCountInSource}"></Label>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Items in view: "></Label>
-            <Label Text="{Binding ItemCountInView}"></Label>
-        </StackLayout>
+        <Grid Padding="3" BackgroundColor="AliceBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="21"></RowDefinition>
+                <RowDefinition Height="21"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" BackgroundColor="Purple" TextColor="White" Text="Items in source: "></Label>
+            <Label Grid.Row="0" Grid.Column="1" BackgroundColor="Purple" TextColor="White" Text="{Binding ItemCountInSource}"></Label>
+
+            <Label Grid.Row="1" Grid.Column="0" BackgroundColor="Purple" TextColor="White" Text="Items in view: "></Label>
+            <Label Grid.Row="1" Grid.Column="1" BackgroundColor="Purple" TextColor="White" Text="{Binding ItemCountInView}"></Label>
+
+            <ActivityIndicator Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Color="Gray" IsRunning="{Binding IsBusy}"></ActivityIndicator>
+        </Grid>
         <CollectionView
             x:Name="ReposCollectionView"
             ItemsSource="{Binding Repos}"
