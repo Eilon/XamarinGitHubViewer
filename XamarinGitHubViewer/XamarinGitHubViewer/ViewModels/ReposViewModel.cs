@@ -20,6 +20,9 @@ namespace XamarinGitHubViewer.ViewModels
         public Command LoadReposCommand { get; set; }
         public Command GetMoreReposCommand { get; set; }
 
+        public int ItemCountInSource { get; private set; }
+        public int ItemCountInView { get; private set; }
+
         public ReposViewModel()
         {
             Title = "Browse";
@@ -64,40 +67,18 @@ namespace XamarinGitHubViewer.ViewModels
             SelectedRepo = null;
         }
 
-        async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
-        {
-            if (IsBusy)
-            {
-                return;
-            }
-
-            IsBusy = true;
-
-            try
-            {
-                // TODO: Check here if the data is not available in settings
-                var token = await SecureStorage.GetAsync("Token");
-
-                var cursorOfOldLastItem = repo.Cursor;
-
-                var items = await new GitHubClient(token).GetRepositories("xamarin", cursorOfOldLastItem);
-                foreach (var item in items)
-                {
-                    Repos.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
         async Task ExecuteLoadReposCommand()
         {
+            await LoadSomeRepos(ensureCleared: true);
+        }
+
+        async Task ExecuteGetMoreReposCommand(RepositoryEdge repo)
+        {
+            await LoadSomeRepos(ensureCleared: false);
+        }
+
+        async Task LoadSomeRepos(bool ensureCleared)
+        {
             if (IsBusy)
             {
                 return;
@@ -107,17 +88,25 @@ namespace XamarinGitHubViewer.ViewModels
 
             try
             {
-                Repos.Clear();
+                if (ensureCleared)
+                {
+                    Repos.Clear();
+                }
 
                 // TODO: Check here if the data is not available in settings
                 var token = await SecureStorage.GetAsync("Token");
 
-                var items = await new GitHubClient(token).GetRepositories("xamarin");
-                foreach (var item in items)
+                var repoResult = await new GitHubClient(token).GetRepositories("xamarin");
+                foreach (var item in repoResult.Repos)
                 {
                     Repos.Add(item);
                 }
                 ReposLoaded = true;
+
+                ItemCountInSource = repoResult.TotalCount;
+                OnPropertyChanged(nameof(ItemCountInSource));
+                ItemCountInView = Repos.Count;
+                OnPropertyChanged(nameof(ItemCountInView));
             }
             catch (Exception ex)
             {

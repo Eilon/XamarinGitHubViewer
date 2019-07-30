@@ -1,9 +1,5 @@
 ﻿using GraphQL.Client;
 using GraphQL.Common.Request;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -22,7 +18,7 @@ namespace XamarinGitHubViewer.Services
 
         bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 
-        public async Task<IEnumerable<RepositoryEdge>> GetRepositories(string orgName, string afterCursor = null)
+        public async Task<RepoListResult> GetRepositories(string orgName, string afterCursor = null)
         {
             if (IsConnected)
             {
@@ -66,7 +62,7 @@ query($login:String!, $after:String)
                     var graphQLResponse = await graphQLClient.PostAsync(recipeGraphQLRequest);
                     var orgRepos = graphQLResponse.GetDataFieldAs<RepositoriesItem>("organization");
 
-                    return orgRepos.Repositories.Edges;
+                    return new RepoListResult(orgRepos.Repositories.Edges, orgRepos.Repositories.TotalCount);
                 }
             }
 

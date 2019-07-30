@@ -12,6 +12,14 @@
         <ToolbarItem Text="Settings" Clicked="Settings_Clicked" />
     </ContentPage.ToolbarItems>
     <StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Items in source: "></Label>
+            <Label Text="{Binding ItemCountInSource}"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Items in view: "></Label>
+            <Label Text="{Binding ItemCountInView}"></Label>
+        </StackLayout>
         <CollectionView
             x:Name="ReposCollectionView"
             ItemsSource="{Binding Repos}"
