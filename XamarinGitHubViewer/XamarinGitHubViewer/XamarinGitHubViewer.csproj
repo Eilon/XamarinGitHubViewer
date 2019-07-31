@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="GraphQL.Client" Version="1.0.3" />
-    <PackageReference Include="Xamarin.Forms" Version="4.1.0.618606" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.2.0.618605-pre2" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.0-pre" />
   </ItemGroup>
 
   <ItemGroup>

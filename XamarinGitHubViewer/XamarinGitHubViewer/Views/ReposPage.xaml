@@ -37,6 +37,7 @@
             SelectionMode="Single"
             SelectedItem="{Binding SelectedRepo}"
             SelectionChangedCommand="{Binding SelectionChangedCommand}"
+            VerticalScrollBarVisibility="Always"
         >
             <d:CollectionView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
